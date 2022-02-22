@@ -35,7 +35,14 @@ First things first, I wanted to make the scene. Considering the goal of the game
    A key element in any 3D platformer is to have enemies. Enemies will always be something that need to exist in games in order for the player to have something to interact with, whether it be jumping on them, or punching them there's so many ways for this method to occur. In my game, I've decided to go the beat 'em up route. However, the way I've gone about it is fairly different as opposed to how games would normally handle this matter. Normally games would handle it using "Hitboxes" I decided to handle it with something I call a "hit point". A small technique I learned that makes attacks much more realistic and accurate in the nature of how they work. For instance, a punch for example will be the most impactful at the fist, seeing as where that's where all the initial pressure ends up. To emulate this, I essentially added a massive sphere to be in place at the end of the punch, with a damage script that deals damage to the enemies. 
 
 ## Enemies 
-Enemies are a very core part of how this works since it's them we'll be hitting. I set up some quick enemies to stand idle, as the main focus of this part is to get the enemies low on health. So after importing a couple and copying and pasting them, I decided to work on their health scripts and add a canvas with a number that essentially displays the health of the enemy. 
+Enemies are a very core part of how this works since it's them we'll be hitting. I set up some quick enemies to stand idle, as the main focus of this part is to get the enemies low on health. So after importing a couple and copying and pasting them, I decided to work on their health scripts and add a canvas with a number that essentially displays the health of the enemy. First things first, I got some enemies that I made, and added a script to them, this script essentially gives the enemy health as well as a health counter, that I'd made using the canvas in unity. 
+
+First things first, I needed to make the enemy controller, So I made a health script and added an "Enemy layer" this allowed me to  then add a player/combat script to the player.
+
+## Animations and Attacks
+
+Attacks and animations come from mixamo, for each animation I coded a different script, for each action/attack. Each animation had it's own attack point at the end of a limb where I'd add a small sphere, to the end of it to act as a point where damage is dealt, I'd add a damage value as an integer to each attack, and added a public void to the enemy script that has a value for health so that health would be subtracted from the max health once attacked. 
+After mapping each attack to a key, I tested to see if a punch labelled at 5 attack power, would kill an enemy with 5 health. After pressing J, it killed and destroyed the object on impact. Meaning that we got the combat segment of the game to work using the hitball technique. 
   
 
 
