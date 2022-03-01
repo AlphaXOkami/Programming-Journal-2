@@ -46,5 +46,13 @@ After mapping each attack to a key, I tested to see if a punch labelled at 5 att
   
 
 
-
+ # Week 5 package 4, Adding more options to our character
+ 
+ ## Introduction
+ 
+ In a 3D platformer, the movement is the deciding factor for how the game plays and feels, the game should feel more akin to suit the player's experiences and should feel fun and flow well in the moment. In today's package I'll be working on giving the player more options in a game and working on those aspects, for example being able to roll, or being able to double jump. Any extra animations I'll be using will be taken from Adobe's Mixamo for this section.
+ 
+ ## Setting the scene
+ 
+Just like the last three packages I'll be using the third person character controller from the ubity asset store as a basis for this. 
 
