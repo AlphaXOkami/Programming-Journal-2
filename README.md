@@ -54,5 +54,76 @@ After mapping each attack to a key, I tested to see if a punch labelled at 5 att
  
  ## Setting the scene
  
-Just like the last three packages I'll be using the third person character controller from the ubity asset store as a basis for this. 
+Just like the last three packages I'll be using the third person character controller from the ubity asset store as a basis for this, meaning I don't have to code a whole new character controller. Using the scene that comes with it allows me to work on adding animations more efficiently. 
+
+
+## Downloading animations 
+
+Well, first things first I needed to figure out what Animations I'd need to download, seeing as I have very simple animations for basic movements. Or Idle animations and some attacks. So that we can give the character more personality and flair. 
+
+The animations I downloaded included: 
+-Roll animation
+-New idle animation
+-Kick animation 
+-Punch animation
+
+Now I have to apply these to the character. But how ?
+
+
+## Animation tree
+Each component has it's own animation tree, the third person controller has it's own thing, now I can add to it and or replace the animations in the tree, so first things first I'll start with the idle animation. So I click on the "PlayerArmature" component, and open up the animator. I click on the "Idle Walk run Blend" and click on the blend tree, clicked on the properties and changed the idle animation with the one I had taken from Mixamo. Once playing it, my character clipped through the floor, which caused some confusion. I could still move but the problem was there was no animation and my character remained clipped through the floor as it moved, with no animations stuck to a pose. I then realised the reason for this issue was due to the fact that, the animation type or the rig wasn't set to "humanoid" so I'd changed the animation type to "Humanoid" and made it so that the animation would play when it needed to, only when my character was idle. Next thing was to get the attack animation done, the easy stuff was done, now I had to focus on scripting. 
+
+## Writing the scripts for any attack animations. 
+
+So first things first, I had to make sure that I had to make sure that the animation would play in the first place so I made sure to set the animation to the right rigging type which again was humanoid. After doing so I made a new script, and named it "Attack" Here's the script:
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Attack : MonoBehaviour
+{
+    private Animator anim;
+    public float cooldownTime = 2f;
+    private float nextFireTime = 0f;
+    public static int noOfClicks = 0;
+    float lastclickedtime = 0;
+    float maxcombodelay = 1;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        anim = GetComponent<Animator>();   
+    }
+    private void Hit()
+    {
+        anim.SetTrigger("Hit");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Hit();
+        } 
+       
+    }
+
+
+
+    
+
+}
+
+
+
+
+
+After doing the script I needed to add the animations so I clicked on the animation I was looking for, which was the "combo punch", first things first I created an empty state and named it "Combo", after doing so, I added the punch combo animation to the state and branched a transition to the idle animation. I then created a new bool and added that to the animation transitions setting one to true and the other to false. Remembering to keep the exit time off on one state.  
+
+The initial problem I had first was the attack didn't play at all, so I thought maybe changing the input type would initially work, and I was very wrong. I changed it and inststead going back to the old input system broke it more. So I changed the input system to "both" instead. That seemed to have reverted it but the input issue persisted, So to fix this I revised the script over again, and changed around some naming conventions, instead of using a boolean I used triggers instead and that seemed to fix the issue. 
+
 
