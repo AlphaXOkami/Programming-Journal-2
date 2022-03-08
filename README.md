@@ -60,7 +60,7 @@ public class Platform : MonoBehaviour
 }
 
 
-Now it should work, at least that's what I initially thought, but even with the script on I had a problem where my character would still not stick to the platform 
+Now it should work, at least that's what I initially thought, but even with the script on I had a problem where my character would still not stick to the platform, so I had to look for a fix seeing as everything was the same. But after looking at the script it turns out that there was nothing wrong with the script itself. The solution was in the animator component, and changing it to animating physics. 
 
 
 
