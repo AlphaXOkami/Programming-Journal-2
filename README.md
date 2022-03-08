@@ -60,7 +60,7 @@ public class Platform : MonoBehaviour
 }
 
 
-Now it should work
+Now it should work, at least that's what I initially thought, but even with the script on I had a problem where my character would still not stick to the platform 
 
 
 
