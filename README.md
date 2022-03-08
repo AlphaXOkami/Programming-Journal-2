@@ -26,8 +26,100 @@ There's many ways to do this, but the easiest way of doing this is using the fun
 
 First things first, I wanted to make the scene. Considering the goal of the game is to make a 3D platformer with melee abilities I want to work on implementing different types of structures, the first of these being moving platforms. to make sure this works I set up 2 platforms in the air, and thought about how I'd go about doing this. First things first I created an animator and an animation track for the object and animated movement for the platform to move. Once done I made the animation loop making it so that I had something there, and we'd have movement. 
 
+
+But then there was a problem, while I do have a moving platform, my character would just slide off the platform whilst the animation played instead of staying on the platform. I wasn't too sure as to why this was. But after doing some research, I looked at doing adding more than just the animation. On the platform I added a second box collider and adjusted the height and position. 
+
+Now the plan is to make a script that uses the trigger I've placed on the platorm. 
+The script would trigger the platform to become a parent object of our player object meaning that it should stick the script looks something like this: 
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Platform : MonoBehaviour
+{
+    public GameObject player;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject==player)
+        {
+            player.transform.parent = transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject==player)
+        {
+            player.transform.parent = null;
+        } 
+    }
+}
+
+
+Now it should work
+
+
+
+
 ## Collectibles 
   Every 3D platformer tend to have collectibles, for this test I decided to have collectibles I previously made and would use them in this example to try and get something working. I added them around the scene and eventually included a collection script that allowed me to destroy the object when I pick it up. I had a score but now I needed something that would show that. So I created a UI canvas and added some text to show off the Text UI on my unity scene, to display the score, and soon have something to show off the overall scoring of the amount of gems collected by the player.
+
+First things first, I needed to set up the script that houses the scoring system in the first place. But in order to do so I'd need to create a new canvas and UI component for text the score to be updated when the collectible has been collected by the player. The script looks something like this: 
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ScoringSystem1 : MonoBehaviour
+{
+    public GameObject scoreText;
+    public int theScore;
+
+    void OnTriggerEnter(Collider other)
+    {
+        theScore += 1;
+        scoreText.GetComponent<Text>().text = "HexoGems" + theScore;
+        Destroy(gameObject);
+    }
+}
+
+One thing that needs to be ticked off is the "Is Trigger" option, mainly so that we can actually collect the object. This is so because without the trigger on the script can't function meaning that the box collider makes the item a solid object that collides with the player when we touch it. 
+
+After testing, it looks like I made an error, in the script above I added the line 
+
+ scoreText.GetComponent<Text>().text = "HexoGems" + theScore; 
+  
+ However, it turns out when I put "HexoGems" it will show as "Hexogems" and not "SCORE: 0" This is because I made the naming convention "HexoGems" and seeing as I'm telling the script to call on that function, it'll essentially deliver that result on screen, which isn't what I want so instead of "HexoGems" I've changed it to "SCORE:" to make sure that it now seems more appropriate in context. 
+  
+  
+  With the changes made the script now looks something like this: 
+  
+  using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ScoringSystem1 : MonoBehaviour
+{
+    public GameObject scoreText;
+    public int theScore;
+
+    void OnTriggerEnter(Collider other)
+    {
+        theScore += 1;
+        scoreText.GetComponent<Text>().text = "SCORE:" + theScore;
+        Destroy(gameObject);
+    }
+}
+
+ After testing it, it looks like it now works. 
+  
   
   
   # Week 5 package 3, Working on Combat in a 3D platformer 
