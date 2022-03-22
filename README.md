@@ -13,7 +13,112 @@ The goal for this semester is to make 4 packages that work on their own and have
 
 First things first I had to set the scene. I made a 3D scene within Unity and created an empty terrain and moved the camera into a position where it could see the player, but now I needed to have a character that I could work on, which I didn't. So to have something to test, I decided on making a capsule 3D object, and made a material to help make it stand out. Now I needed to add a rigidbody to it so that there's gravity to our player so that whenever he's in the sky. Next I needed to make a new script, that would essentially act as a character controller. After making the character controller in C# I increased the movement speed to see if the character would move, and it did. However, there was now one problem. The character would just roll around the scene instead of maintaining a single position as it moved. So in order to fix this I'd have to go into the rigidbody settings and essentially freeze the rotation of the character on every axis. Now it works, I have basic movement. 
 
-Now it was time to work on jumps, I revisited the script to work on jumps in the scene so that allows our player to jump up and down. So now we have a fully working character with good movement. 
+
+
+Here's the code: 
+
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using UnityEngine.Playables;
+
+public class ThirdPersonMovement : MonoBehaviour
+{
+
+    public CharacterController controller;
+
+    public float speed= 6f;
+    public float turnsmoothtime = 0.1f;
+    private float turnsmoothvelocity;
+    public float jumphspeed = 1f;
+    private float yspeed;
+    private Vector3 movementDirection;
+    private float velocity;
+    private float rotationSpeed;
+    
+    
+    void Update()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+
+
+
+        yspeed += Physics.gravity.y * Time.deltaTime;
+
+
+        yspeed += Physics.gravity.y * Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            yspeed = jumphspeed;
+        }
+       
+
+        if (direction.magnitude>=0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnsmoothvelocity,
+                turnsmoothtime);
+            var rotation = transform.rotation;
+            rotation=Quaternion.Euler(0f,targetAngle,0f);
+            rotation=Quaternion.Euler(0f,targetAngle,0f);
+            transform.rotation = rotation;
+            controller.Move(direction * speed * Time.deltaTime);
+        }
+
+        if (movementDirection!=Vector3.zero)
+        {
+            Quaternion toRotation=Quaternion.LookRotation(movementDirection,Vector3.up);
+
+            transform.rotation =
+                Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+        }
+      
+    }
+
+  }
+
+
+
+
+
+Now it was time to work on jumps, I revisited the script to work on jumps in the scene so that allows our player to jump up and down. So now we have a fully working character with good movement.  Here's the code for jumping:
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Jump : MonoBehaviour
+{
+    public float speed = 10f;
+    public Rigidbody rb;
+    public bool Grounded = true;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)&& Grounded)
+        {
+            rb.AddForce(new Vector3(0,5,0),ForceMode.Impulse);
+            Grounded = false;
+        }
+        
+    }
+
+
+}
+
 
 ## Making the camera move with the character 
 
