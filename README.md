@@ -223,8 +223,52 @@ public class ScoringSystem1 : MonoBehaviour
     }
 }
 
- After testing it, it looks like it now works. 
+ After doing some more trouble shooting, I realised that I'd have to make two seperate scripts, one that essentially houses the scoring system and another that will allow the player to collect any collectibles to increase their score. So that meant I had one for collection and another for scoring. 
+    
+    
+    After making the scoring script, I attached it to an empty game object along with UI elements to get it to basically change the score text each time a gem was collected by the player. 
   
+    Here's the script for the scoring system:
+    
+    using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ScoringSystem1 : MonoBehaviour
+{
+    public GameObject scoreText;
+    public static int theScore;
+
+    void Update()
+    {
+        
+        scoreText.GetComponent<Text>().text = "SCORE: " + theScore;
+        
+    }
+}
+    
+    
+Next I added a new script to the collectibles that allowed them to be colleced, using the OnTriggerEnter command, and using colliders so that this works. 
+    Here's the script:
+    
+    using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Collection : MonoBehaviour
+{
+    
+    void OnTriggerEnter(Collider other)
+    {
+      ScoringSystem1.theScore += 1;
+      Destroy(gameObject);
+    }
+}
+
+    
+    After some more tinkering, it works. 
+
   
   
   # Week 5 package 3, Working on Combat in a 3D platformer 
@@ -243,7 +287,7 @@ After mapping each attack to a key, I tested to see if a punch labelled at 5 att
   
 
 
- # Week 5 package 4, Adding more options to our character
+ # Week 5 package 3 continued , Adding more options to our character
  
  ## Introduction
  
@@ -322,5 +366,52 @@ public class Attack : MonoBehaviour
 After doing the script I needed to add the animations so I clicked on the animation I was looking for, which was the "combo punch", first things first I created an empty state and named it "Combo", after doing so, I added the punch combo animation to the state and branched a transition to the idle animation. I then created a new bool and added that to the animation transitions setting one to true and the other to false. Remembering to keep the exit time off on one state.  
 
 The initial problem I had first was the attack didn't play at all, so I thought maybe changing the input type would initially work, and I was very wrong. I changed it and inststead going back to the old input system broke it more. So I changed the input system to "both" instead. That seemed to have reverted it but the input issue persisted, So to fix this I revised the script over again, and changed around some naming conventions, instead of using a boolean I used triggers instead and that seemed to fix the issue. 
+    
+    
+    
+# Week 5 package 4 Combat, Shooting a projectile. 
+    
+    For this, I wanted to wotrk on shooting a projectile from our character that would kill any enemies we have. Some games have this and I feel like it's more enjoyable than being able to shoot enemies at a range. 
+    
+    First things first I needed to write a script that would instantiate an object (being the projectile), and also tell the object what way to fire, and what the force and speed of the projectile should be. 
+    
+    
+    Here's the code:
+    using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
+public class Fireball : MonoBehaviour
+{
+    public GameObject Projectile;
+
+    public Transform Firepoint;
+
+    public float force;
+
+    private Vector3 direction;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Fireball P = Instantiate(Projectile, Firepoint.position, Quaternion.identity).GetComponent<Fireball>();
+            P.direction = transform.forward;
+            P.Speed =force;
+        }
+    }
+
+    public float Speed { get; set; }
+}
+
+    
+    After adding this, I needed to make sure that the projectile would destroy any objects, being the enemies here. After doing so, it worked. 
+ 
 
