@@ -170,7 +170,7 @@ Now it should work, at least that's what I initially thought, but even with the 
 
 
 
-## Collectibles 
+## Collectibles Package 3  
   Every 3D platformer tend to have collectibles, for this test I decided to have collectibles I previously made and would use them in this example to try and get something working. I added them around the scene and eventually included a collection script that allowed me to destroy the object when I pick it up. I had a score but now I needed something that would show that. So I created a UI canvas and added some text to show off the Text UI on my unity scene, to display the score, and soon have something to show off the overall scoring of the amount of gems collected by the player.
 
 First things first, I needed to set up the script that houses the scoring system in the first place. But in order to do so I'd need to create a new canvas and UI component for text the score to be updated when the collectible has been collected by the player. The script looks something like this: 
@@ -271,7 +271,7 @@ public class Collection : MonoBehaviour
 
   
   
-  # Week 5 package 3, Working on Combat in a 3D platformer 
+  # Week 5 package 4, Working on Combat in a 3D platformer 
    
    A key element in any 3D platformer is to have enemies. Enemies will always be something that need to exist in games in order for the player to have something to interact with, whether it be jumping on them, or punching them there's so many ways for this method to occur. In my game, I've decided to go the beat 'em up route. However, the way I've gone about it is fairly different as opposed to how games would normally handle this matter. Normally games would handle it using "Hitboxes" I decided to handle it with something I call a "hit point". A small technique I learned that makes attacks much more realistic and accurate in the nature of how they work. For instance, a punch for example will be the most impactful at the fist, seeing as where that's where all the initial pressure ends up. To emulate this, I essentially added a massive sphere to be in place at the end of the punch, with a damage script that deals damage to the enemies. 
 
@@ -369,7 +369,7 @@ The initial problem I had first was the attack didn't play at all, so I thought 
     
     
     
-# Week 5 package 4 Combat, Shooting a projectile. 
+# Week 5 package 4 Combat Continued, Shooting a projectile. 
     
     For this, I wanted to wotrk on shooting a projectile from our character that would kill any enemies we have. Some games have this and I feel like it's more enjoyable than being able to shoot enemies at a range. 
     
