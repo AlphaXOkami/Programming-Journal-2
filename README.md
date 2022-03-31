@@ -224,6 +224,8 @@ public class PlayerMove : MonoBehaviour
 }
 
 
+ 
+  Pretty simple code overall, I'm basically telling the code to tell the player to move along the vertical and horizontal axis' and to also allow the player to jump when the spacebar is pressed, only when the player is in a state where they're not jumping but are able to jump if they're touching the ground, to check this I created an empty gameobject called "Groundcheck" in order to check if the feet of the player is touching the ground, then tell the script that we can jump when we're touching the ground.
 
 
 # Week 3 package 2 Setting a scene 
