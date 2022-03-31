@@ -125,6 +125,107 @@ public class Jump : MonoBehaviour
 There's many ways to do this, but the easiest way of doing this is using the function known as cinemachine. I could use the Cinemachine function to help the camera essentially focus or "look at" the player as they move. I had to adjust the distance of the camera to make the gameplay feel much more smooth, and actually having an idea of the player's surroundings, makigng it easier to notice surroundings and whatnot. 
 
 
+
+# However, There was a problem
+
+When running the code I had problems with my character's movement or the camera being very jittery, the reason for this was because I had issues using a character controller, this led to a plethora if issues that involved mainly colliders, and problems where the character would just float around, I tried to rerun various solutions and work on what may have gone wrong by repeating the same process again. However, after doing it the first time, I realised it'd be more smart to rework the whole movement system from scratch but instead of using a character controller I decided to make my own one and use physics more. 
+
+## But first things first, Rework the camera
+
+Reworking the camera this time around would be the harder part, considering that I had to make the feel of the camera just right. I instead opted for a freelook camera from the cinemachine options. Now, I needed to make sure that I had the right camera used, first things first, I'd mess around with the top, middle and bottom rigs of the camera to get the scene perfectly into view. But one problem remained, I had to fix the movement being inverted. After assigning my main camera, and then choosing to invert the camera on the Y axis, I was able to get my camera working as intended, granted I needed to play around with some more settings like the rigs, and where it is the player can look. 
+
+## Movement and jumps
+
+Next  came the movement itself, there were various hoops that needed to be jumped, one was that when I got my movement to work, my inputs were all wrong. the camera would follow the player fine, but the character would control funny, I'd press W and my character would move in the opposite direction, so I ended up doing some more tweaking to the code and freezing the roation along the Y axis to stop the player object from floating when it moves. 
+
+Next came the harder part, the jump mechanic, again seeing as we're not using a character controller, none of the previous scripts I wrote would work, at one point I had the controller work but the character wouldn't jump, and the main reason for this was because things in the inspector weren't layered properly or tagged correctly, after fixing this issue I was able to get the code working and then tune the jump height to make sure that it feels natural, I then went again and tweaked the camera again so that the jump didn't affect how the player could see.
+
+Here's the code:
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerMove : MonoBehaviour
+{
+    Rigidbody rb;
+    float ForwardInput, HorizontalInput;
+    [SerializeField] float Spd;
+    Vector3 MoveVector;
+    [Space]
+    [SerializeField] Transform Maincam;
+    [Header("Jump")]
+    [SerializeField] LayerMask GroundLayer;
+    [SerializeField] Transform GroundCheck;
+    [SerializeField] float CheckRadius = 0.2f;
+    [SerializeField] int JumpCount;
+    [SerializeField] float JumpHeight;
+    bool IsGrounded;
+    int JumpsRemaining;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        PlayerInput();
+        RotatePlayer();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
+    }
+    //CONTROLS FOR THE PLAYER
+    void PlayerInput()
+    {
+        ForwardInput = Input.GetAxisRaw("Vertical");
+        HorizontalInput = Input.GetAxisRaw("Horizontal");
+
+        MoveVector = (transform.right * HorizontalInput) + (transform.forward * ForwardInput);
+    }
+
+    void Jump()
+    {
+        float VelocityY;
+        IsGrounded = Physics.CheckSphere(GroundCheck.position, CheckRadius, GroundLayer);
+
+        if (IsGrounded)
+            JumpsRemaining = JumpCount;
+
+        if (JumpsRemaining > 0)
+        {
+            JumpsRemaining--;
+
+            VelocityY = Mathf.Sqrt(-2 * Physics.gravity.y * JumpHeight);
+            rb.velocity = new Vector3(rb.velocity.x, VelocityY, rb.velocity.z);
+        }
+
+     
+    }
+
+
+    void RotatePlayer()
+    {
+        transform.eulerAngles = new Vector3(0, Maincam.transform.eulerAngles.y);
+
+        
+    }
+
+
+    private void FixedUpdate()
+    {
+        rb.velocity = new Vector3(MoveVector.x * Spd, rb.velocity.y, MoveVector.z * Spd);
+    }
+}
+
+
+
+
 # Week 3 package 2 Setting a scene 
 
 ## Moving platforms 
