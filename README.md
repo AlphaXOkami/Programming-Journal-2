@@ -383,95 +383,7 @@ Enemies are a very core part of how this works since it's them we'll be hitting.
 
 First things first, I needed to make the enemy controller, So I made a health script and added an "Enemy layer" this allowed me to  then add a player/combat script to the player.
 
-## Animations and Attacks
 
-Attacks and animations come from mixamo, for each animation I coded a different script, for each action/attack. Each animation had it's own attack point at the end of a limb where I'd add a small sphere, to the end of it to act as a point where damage is dealt, I'd add a damage value as an integer to each attack, and added a public void to the enemy script that has a value for health so that health would be subtracted from the max health once attacked. 
-After mapping each attack to a key, I tested to see if a punch labelled at 5 attack power, would kill an enemy with 5 health. After pressing J, it killed and destroyed the object on impact. Meaning that we got the combat segment of the game to work using the hitball technique. 
-  
-
-
- # Week 5 package 3 continued , Adding more options to our character
- 
- ## Introduction
- 
- In a 3D platformer, the movement is the deciding factor for how the game plays and feels, the game should feel more akin to suit the player's experiences and should feel fun and flow well in the moment. In today's package I'll be working on giving the player more options in a game and working on those aspects, for example being able to roll, or being able to double jump. Any extra animations I'll be using will be taken from Adobe's Mixamo for this section.
- 
- ## Setting the scene
- 
-Just like the last three packages I'll be using the third person character controller from the ubity asset store as a basis for this, meaning I don't have to code a whole new character controller. Using the scene that comes with it allows me to work on adding animations more efficiently. 
-
-
-## Downloading animations 
-
-Well, first things first I needed to figure out what Animations I'd need to download, seeing as I have very simple animations for basic movements. Or Idle animations and some attacks. So that we can give the character more personality and flair. 
-
-The animations I downloaded included: 
--Roll animation
--New idle animation
--Kick animation 
--Punch animation
-
-Now I have to apply these to the character. But how ?
-
-
-## Animation tree
-Each component has it's own animation tree, the third person controller has it's own thing, now I can add to it and or replace the animations in the tree, so first things first I'll start with the idle animation. So I click on the "PlayerArmature" component, and open up the animator. I click on the "Idle Walk run Blend" and click on the blend tree, clicked on the properties and changed the idle animation with the one I had taken from Mixamo. Once playing it, my character clipped through the floor, which caused some confusion. I could still move but the problem was there was no animation and my character remained clipped through the floor as it moved, with no animations stuck to a pose. I then realised the reason for this issue was due to the fact that, the animation type or the rig wasn't set to "humanoid" so I'd changed the animation type to "Humanoid" and made it so that the animation would play when it needed to, only when my character was idle. Next thing was to get the attack animation done, the easy stuff was done, now I had to focus on scripting. 
-
-## Writing the scripts for any attack animations. 
-
-So first things first, I had to make sure that I had to make sure that the animation would play in the first place so I made sure to set the animation to the right rigging type which again was humanoid. After doing so I made a new script, and named it "Attack" Here's the script:
-
-
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Attack : MonoBehaviour
-{
-    private Animator anim;
-    public float cooldownTime = 2f;
-    private float nextFireTime = 0f;
-    public static int noOfClicks = 0;
-    float lastclickedtime = 0;
-    float maxcombodelay = 1;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        anim = GetComponent<Animator>();   
-    }
-    private void Hit()
-    {
-        anim.SetTrigger("Hit");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Hit();
-        } 
-       
-    }
-
-
-
-    
-
-}
-
-
-
-
-
-After doing the script I needed to add the animations so I clicked on the animation I was looking for, which was the "combo punch", first things first I created an empty state and named it "Combo", after doing so, I added the punch combo animation to the state and branched a transition to the idle animation. I then created a new bool and added that to the animation transitions setting one to true and the other to false. Remembering to keep the exit time off on one state.  
-
-The initial problem I had first was the attack didn't play at all, so I thought maybe changing the input type would initially work, and I was very wrong. I changed it and inststead going back to the old input system broke it more. So I changed the input system to "both" instead. That seemed to have reverted it but the input issue persisted, So to fix this I revised the script over again, and changed around some naming conventions, instead of using a boolean I used triggers instead and that seemed to fix the issue. 
-    
-    
-    
 # Week 5 package 4 Combat Continued, Shooting a projectile. 
     
     For this, I wanted to wotrk on shooting a projectile from our character that would kill any enemies we have. Some games have this and I feel like it's more enjoyable than being able to shoot enemies at a range. 
@@ -516,5 +428,49 @@ public class Fireball : MonoBehaviour
 
     
     After adding this, I needed to make sure that the projectile would destroy any objects, being the enemies here. After doing so, it worked. 
+    
+    
+    # Week 6 Package 5 working on a timer system 
+
+    Part of the goal for my mech demo is to try to get the player to complete the level the fastest way they can, and try to complete the level in the best possible time that they can, when they reach the goal. This was a small package to make it's a culmination of one script and a text component. First things first, I created a text object inside the existing canvas that I already have, I then went to work on the script, straight after here's the script: 
+    
+    using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+
+public class Timer : MonoBehaviour
+{
+    public Text timerText;
+    private float startTime;
+    // Start is called before the first frame update
+    void Start()
+    {
+        startTime = Time.time;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        float t = Time.time - startTime;
+        string minutes = ((int)t / 60).ToString();
+        string seconds = (t % 60).ToString("f2");
+        timerText.text = minutes + ":" + seconds;
+    }
+}
+
+
+
+
+## Package 7 Text showing on trigger 
+
+  One important thing about games is teaching the players how to play the game, I'm using hints to do this but via a destroyable object using an ontrigger component, on a box collider. 
+
+First things first I wanted to make something the player could interact with, so I made an exclamation mark in Maya, and exported it to unity. this would be our base.
+    
+    Next I added a script to the object that would house a place where I could put in whatever I wanted into a text box in the inspector. 
+      
+ 
  
 
