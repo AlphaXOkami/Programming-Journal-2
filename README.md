@@ -470,7 +470,94 @@ public class Timer : MonoBehaviour
 First things first I wanted to make something the player could interact with, so I made an exclamation mark in Maya, and exported it to unity. this would be our base.
     
     Next I added a script to the object that would house a place where I could put in whatever I wanted into a text box in the inspector. 
+    
+    using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ShowUI : MonoBehaviour
+{
+    public GameObject uiObject;
+
+    private void Start()
+    {
+        uiObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider player)
+    {
+        if (player.gameObject.tag=="Player")
+        {
+            uiObject.SetActive(true);
+            StartCoroutine("WaitForSec");
+        }
+    }
+    IEnumerator WaitForSec()
+    {
+        yield return new WaitForSeconds(5);
+        Destroy(uiObject);
+        Destroy(gameObject);
+    }
+}
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+## Package 8 Making a dash 
       
- 
+ I wanted to enhance gameplay a little more, so to do so I included a dash to my work, with some particles. With my game I wanted to make it so that the character could have some significant speed when moving, and being able to dash midair for extra leverage. Meaning there's more the player can do to complete the level/game in the best time they possibly could get. Here's the script. 
+    
+   using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Dash : MonoBehaviour
+{
+    public float dashSpeed;
+    Rigidbody rig;
+    bool isDashing;
+
+    public GameObject dashEffect;
+    void Start()
+    {
+        rig = GetComponent<Rigidbody>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            isDashing = true; 
+    }
+    private void FixedUpdate()
+    {
+        if (isDashing)
+        {
+            Dashing();
+        }
+    }
+
+    private void Dashing()
+    {
+        rig.AddForce(transform.forward * dashSpeed, ForceMode.Impulse);
+        isDashing = false;
+
+        GameObject effect = Instantiate(dashEffect, Camera.main.transform.position, dashEffect.transform.rotation);
+        effect.transform.parent = Camera.main.transform;
+        effect.transform.LookAt(transform)
+    ;
+    }
+}
+    
+    
+In the script, I wanted to make sure that the player has some form of dash, so I'm just asking the script to let the player dash when the player presses shift. 
+    
+    
  
 
