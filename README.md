@@ -558,6 +558,9 @@ public class Dash : MonoBehaviour
     
 In the script, I wanted to make sure that the player has some form of dash, so I'm just asking the script to let the player dash when the player presses shift. 
     
+  ## Adding new hazards
     
+    
+    Seeing as this was a game that requires the player to finish the level as fast as they can, I included some extra obstacles like moving walls, so that when you hit them, they'll cause the player to fall. Making them start again. I made it so the player could maybe use these to elevate themselves if they use their jumps right or they get hit, causing them to start again. The initial problems I had with these were that 
  
 
